@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.payrollsystem.mapper.SalaryMapper">
+
+    <resultMap id="pageSalary" type="com.example.payrollsystem.entity.Salary">
+        <result column="salaryNo" property="salaryNo" />
+        <result column="staffNo" property="staffNo" />
+        <result column="staffName" property="staffName" />
+        <result column="staffPost" property="staffPost" />
+        <result column="staffTitle" property="staffTitle" />
+        <result column="baseSalary" property="baseSalary" />
+        <result column="income" property="income" />
+        <result column="expend" property="expend" />
+        <result column="netPayroll" property="netPayroll" />
+    </resultMap>
+
+    <select id="findPage" resultMap="pageSalary">
+        select * from Salary
+        <where>
+            <if test="salaryNo != null and salaryNo != ''">
+                and Salary.salaryNo like concat('%', #{salaryNo} ,'%')
+            </if>
+            <if test="staffNo != null and staffNo != ''">
+                and Salary.staffNo like concat('%', #{staffNo} ,'%')
+            </if>
+            <if test="staffPost != null and staffPost != ''">
+                and Salary.staffPost like concat('%', #{staffPost} ,'%')
+            </if>
+        </where>
+    </select>
+
+    <delete id="removeBySalaryNo">
+        delete from Salary where salaryNo = #{salaryNo}
+    </delete>
+
+    <delete id="removeBySalaryNos">
+        DELETE FROM Salary
+        <where>
+            <if test="salaryNos!=null and salaryNos.size>0">
+                <foreach item="salaryNo" collection="salaryNos" open="salaryNo in(" separator="," close=")">
+                    #{salaryNo}
+                </foreach>
+            </if>
+        </where>
+    </delete>
+</mapper>

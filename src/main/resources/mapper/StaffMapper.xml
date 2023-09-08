@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.payrollsystem.mapper.StaffMapper">
+
+    <resultMap id="pageStaff" type="com.example.payrollsystem.entity.Staff">
+        <result column="staffNo" property="staffNo" />
+        <result column="staffName" property="staffName" />
+        <result column="staffPost" property="staffPost" />
+        <result column="staffTitle" property="staffTitle" />
+    </resultMap>
+
+    <select id="findPage" resultMap="pageStaff">
+        select * from Staff
+        <where>
+            <if test="staffNo != null and staffNo != ''">
+                and Staff.staffNo like concat('%', #{staffNo} ,'%')
+            </if>
+            <if test="staffName != null and staffName != ''">
+                and Staff.staffName like concat('%', #{staffName} ,'%')
+            </if>
+            <if test="staffPost != null and staffPost != ''">
+                and Staff.staffPost like concat('%', #{staffPost} ,'%')
+            </if>
+        </where>
+    </select>
+
+    <delete id="removeByStaffNo">
+        delete from Staff where staffNo = #{staffNo}
+    </delete>
+
+    <delete id="removeByStaffNos">
+        DELETE FROM Staff
+        <where>
+            <if test="staffNos!=null and staffNos.size>0">
+                <foreach item="staffNo" collection="staffNos" open="staffNo in(" separator="," close=")">
+                    #{staffNo}
+                </foreach>
+            </if>
+        </where>
+    </delete>
+
+</mapper>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.payrollsystem.mapper.PersonneldataMapper">
+    <resultMap id="pagePersonnelData" type="com.example.payrollsystem.entity.Personneldata">
+        <result column="personnelDataNo" property="personnelDataNo" />
+        <result column="staffNo" property="staffNo" />
+        <result column="baseSalary" property="baseSalary" />
+        <result column="livingAllowances" property="livingAllowances" />
+        <result column="bookFee" property="bookFee" />
+        <result column="commutingFee" property="commutingFee" />
+        <result column="cleanFee" property="cleanFee" />
+        <result column="workHours" property="workHours" />
+        <result column="hourlyEarnings" property="hourlyEarnings" />
+        <result column="postAllowance" property="postAllowance" />
+        <result column="individualIncomeTax" property="individualIncomeTax" />
+        <result column="housingFund" property="housingFund" />
+        <result column="premium" property="premium" />
+    </resultMap>
+
+    <select id="findPage" resultMap="pagePersonnelData">
+        select * from Personneldata
+        <where>
+            <if test="personnelDataNo != null and personnelDataNo != ''">
+                and Personneldata.personnelDataNo like concat('%', #{personnelDataNo} ,'%')
+            </if>
+            <if test="staffNo != null and staffNo != ''">
+                and Personneldata.staffNo like concat('%', #{staffNo} ,'%')
+            </if>
+        </where>
+    </select>
+
+    <delete id="removeByPersonnelDataNo">
+        delete from Personneldata where personnelDataNo = #{personnelDataNo}
+    </delete>
+
+    <delete id="removeByPersonnelDataNos">
+        DELETE FROM Personneldata
+        <where>
+            <if test="personnelDataNos!=null and personnelDataNos.size>0">
+                <foreach item="personnelDataNo" collection="personnelDataNos" open="personnelDataNo in(" separator="," close=")">
+                    #{personnelDataNo}
+                </foreach>
+            </if>
+        </where>
+    </delete>
+</mapper>
